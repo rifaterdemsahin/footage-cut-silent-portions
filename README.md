@@ -1,39 +1,73 @@
-# Auto-Cut Silence Portions
+# ✂️ Auto-cut silent portions
 
-This project allows you to automatically cut silent portions from your video files. It provides a simple web interface (`index.html`) where you can configure the silence detection settings, and a Node.js backend that uses `ffmpeg` to process the most recent video file in the `movies` folder.
+Cut dead air out of talking-head video, dump the speech as clips, and stitch a tight master.
 
-## Prerequisites
-- **Node.js**: Ensure you have Node.js installed.
-- **FFmpeg**: This project requires FFmpeg and FFprobe to be installed on your system.
+🌐 **GitHub Pages:** [https://rifaterdemsahin.github.io/footage-cut-silent-portions/](https://rifaterdemsahin.github.io/footage-cut-silent-portions/)
 
-## Setup
-1. Open terminal in this folder.
-2. Install the dependencies by running:
-   ```bash
-   npm install
-   ```
+> [!WARNING]
+> GitHub Pages is **docs only** (HTML/CSS). FFmpeg runs on your machine. Use the local server below to actually cut video.
 
-## GitHub Pages Link
-The UI is available on GitHub Pages: [https://rifaterdemsahin.github.io/footage-cut-silent-portions/](https://rifaterdemsahin.github.io/footage-cut-silent-portions/)
+## 🧰 Prerequisites
 
-> [!WARNING] 
-> **Important Limitation:** GitHub Pages only hosts static files (HTML/CSS). This application requires a Node.js backend to run `ffmpeg` and process video files locally on your machine. Therefore, clicking the process button on the GitHub Pages site **will not work** because it cannot access your local file system or run FFmpeg. You must run the server locally to process videos!
+- **Node.js** 18+
+- **FFmpeg** + **FFprobe** (`brew install ffmpeg`)
 
-## Usage
-1. Start the server by running:
-   ```bash
-   npm start
-   ```
-2. Open your web browser and go to `http://localhost:4000`
-3. Place a video file in the `movies` folder.
-4. On the web interface, adjust your desired settings:
-   - **Silence Threshold (dB)**: Volume level to be considered silence (e.g., -30).
-   - **Silence Duration**: The minimum duration of silence to detect (e.g., 0.5 seconds).
-   - **Padding**: Extra time left around the cuts to make it sound natural (e.g., 0.1 seconds).
-5. Click **"Find & Process Last Video"**.
-6. The backend will find the most recently modified video in the `movies` folder, process it, and save the result into the `output` folder.
+## 💻 Local server
 
-## How it works
-- The backend first runs `ffmpeg` with the `silencedetect` filter to find the start and end timestamps of silent parts.
-- It calculates the non-silent periods based on the duration, threshold, and padding settings.
-- Finally, it uses a complex filter (`trim` and `concat`) to slice the video, remove the silences, and merge the remaining clips together into a new video file.
+```bash
+npm install
+npm start
+```
+
+Open [http://localhost:4000](http://localhost:4000) in **Google Chrome**.
+
+```bash
+open -a "Google Chrome" http://localhost:4000
+```
+
+Put source files in `movies/`. Cuts and clips land in `output/`.
+
+## 🎞️ Process `alpha.mp4` from the CLI
+
+```bash
+# copy / rename the take
+cp "/path/to/output alpha.mp4" movies/alpha.mp4
+
+# auto threshold (recommended for quiet mics)
+node process-video.js movies/alpha.mp4 output auto 0.5 0.12
+```
+
+Outputs:
+
+- `output/alpha/clips/clip_*.mp4` — speech footage
+- `output/alpha/alpha_nosilence.mp4` — concatenated master
+- `output/last-run.json` — timings for `performance.html`
+
+## 📊 Last run (`alpha.mp4`)
+
+|  |  |
+|---|---|
+| Source | 3:54 · 1920×1080 · 68 MB |
+| Cut master | 1:08 · 16 MB · 25 clips |
+| Silence removed | 71% |
+| Wall time | **11.5 seconds** (~20× realtime) |
+| Threshold | auto **−40 dB** (mean −48.4 dB, peak −20.6 dB) |
+
+See [performance.html](https://rifaterdemsahin.github.io/footage-cut-silent-portions/performance.html) and [rationale.html](https://rifaterdemsahin.github.io/footage-cut-silent-portions/rationale.html).
+
+## 🆚 Why not DaVinci Resolve?
+
+Resolve is a full NLE. This repo is a **headless silence gate** so an agent can run, watch, and retry. Use Resolve *after* you have clips. The comparison and the **AI agent prompt** live on the [home page](https://rifaterdemsahin.github.io/footage-cut-silent-portions/).
+
+## ⚙️ How it works
+
+1. Measure loudness (`volumedetect`) and pick a threshold when set to `auto`.
+2. `silencedetect` on audio only.
+3. Keep regions get padding; tiny blips drop; close gaps merge.
+4. Each keep region is encoded as a clip, then concatenated with stream copy.
+
+## 🚀 Deploy docs
+
+```bash
+npm run deploy
+```

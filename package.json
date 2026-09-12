@@ -4,7 +4,8 @@
   "description": "footage-cut-silent-portions",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "PORT=4000 node server.js",
+    "cut": "node process-video.js movies/alpha.mp4 output auto 0.5 0.12",
     "deploy": "gh-pages -d public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 Rationale · silence cut</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">✂️ Footage cut · silent portions</div>
+      <nav>
+        <a href="index.html">🏠 Home</a>
+        <a href="performance.html">⏱️ Performance</a>
+        <a class="active" href="rationale.html">🧠 Rationale</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>🧠 Why this pipeline exists</h1>
+      <p class="lead">Talking-head footage is mostly waiting. The useful product is the spoken bits as files an editor — or an agent — can grab without opening a timeline.</p>
+    </section>
+
+    <section class="card">
+      <h2>🎯 The job</h2>
+      <ul class="emoji">
+        <li>📥 <strong>Input:</strong> one long take (here, <code>output alpha.mp4</code> → <code>movies/alpha.mp4</code>).</li>
+        <li>🤫 <strong>Detect:</strong> stretches of audio below a noise floor for ≥ 0.5 s.</li>
+        <li>🩹 <strong>Pad:</strong> keep ~120 ms around each keep-region so words are not clipped.</li>
+        <li>📁 <strong>Footage:</strong> each keep-region is its own MP4 in <code>output/alpha/clips/</code>.</li>
+        <li>🧵 <strong>Master:</strong> those clips concatenated to <code>alpha_nosilence.mp4</code>.</li>
+        <li>📋 <strong>Receipt:</strong> <code>last-run.json</code> with timings so performance.html stays honest.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🆚 Why not DaVinci Resolve for this step?</h2>
+      <p>Resolve is the right tool to <em>finish</em> a video. It is the wrong tool to <em>batch-strip silence</em> from raw takes:</p>
+      <ul class="emoji">
+        <li>🖱️ Resolve wants a human in a GUI. This wants a command an agent can retry.</li>
+        <li>📁 Resolve gives you one timeline. This gives you numbered clips on disk — the actual footage to reuse.</li>
+        <li>🔁 50 files in a folder is a <code>for</code> loop here and a day of clicking in Resolve.</li>
+        <li>🧪 Threshold, min-silence, and padding are data. They belong in JSON, not in undocumented playhead habits.</li>
+        <li>💸 Resolve Studio / Fairlight is heavy for “delete the quiet parts.” FFmpeg already has <code>silencedetect</code>.</li>
+      </ul>
+      <p>Hand the nosilence master (or the clip folder) to Resolve afterwards if you need color, titles, or music. Do not start there.</p>
+    </section>
+
+    <section class="card">
+      <h2>🔬 Design choices</h2>
+      <table class="compare">
+        <thead>
+          <tr><th>Choice</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🎚️ Auto threshold</td>
+            <td>This file’s mean volume is −48.4 dB. A textbook −30 dB cut 88% of it and ate speech. Auto uses <code>max(mean+8, peak−20)</code> → −40 dB.</td>
+          </tr>
+          <tr>
+            <td>🎧 Audio-only detect</td>
+            <td><code>ffmpeg -vn</code> so silence detection does not decode 1080p. 220 ms vs several seconds.</td>
+          </tr>
+          <tr>
+            <td>🧩 Per-clip encode, then copy-concat</td>
+            <td>One giant <code>filter_complex</code> is brittle at 25+ segments. Clips on disk are the product; concat is a bonus master.</td>
+          </tr>
+          <tr>
+            <td>⚡ libx264 veryfast CRF 20</td>
+            <td>Fast enough for an agent loop, sharp enough for 1080 talking-head. Not a delivery grade.</td>
+          </tr>
+          <tr>
+            <td>🧹 Min clip 0.25 s + merge 0.25 s</td>
+            <td>Stops 80 ms blips and stitches speech that silence-detect split on a breath.</td>
+          </tr>
+          <tr>
+            <td>🧾 JSON report</td>
+            <td>If the agent “fixed” something, you can see whether duration and clip count actually changed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>⚠️ What this will not do</h2>
+      <ul class="emoji">
+        <li>🗣️ It does not transcribe. Quiet speech and noise look similar to a dB gate.</li>
+        <li>🎵 It will cut intentional pauses, jokes that land late, and room tone you wanted.</li>
+        <li>🎨 It will not match color, stabilize, or loudness-normalize beyond the encode.</li>
+        <li>☁️ GitHub Pages will not process your disk. That is the local Node server.</li>
+      </ul>
+    </section>
+
+    <p class="footer">🌐 <a href="https://rifaterdemsahin.github.io/footage-cut-silent-portions/">https://rifaterdemsahin.github.io/footage-cut-silent-portions/</a></p>
+  </div>
+</body>
+</html>

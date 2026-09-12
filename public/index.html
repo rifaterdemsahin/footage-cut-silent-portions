@@ -1,80 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto-Cut Silence</title>
-    <style>
-        body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: 0 auto; }
-        .card { border: 1px solid #ccc; padding: 1.5rem; border-radius: 8px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        input[type="number"], input[type="text"] { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { padding: 0.75rem 1.5rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; width: 100%; }
-        button:hover { background-color: #0056b3; }
-        button:disabled { background-color: #a0c4ff; cursor: not-allowed; }
-        #status { margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; font-family: monospace; white-space: pre-wrap; display: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✂️ Auto-cut silent footage</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="card">
-        <h2>Auto-Cut Silence from Video</h2>
-        <p>This tool will automatically find the most recent video file in the <code>movies</code> folder, detect silent portions based on the configuration below, and create a new cut video in the <code>output</code> folder.</p>
-        
-        <div class="form-group">
-            <label for="noiseTolerance">Silence Threshold (dB) - The volume level considered as silence</label>
-            <input type="number" id="noiseTolerance" value="-30" step="1">
-        </div>
-        
-        <div class="form-group">
-            <label for="duration">Silence Duration (seconds) - Minimum duration of silence to be cut</label>
-            <input type="number" id="duration" value="0.5" step="0.1">
-        </div>
-        
-        <div class="form-group">
-            <label for="margin">Padding (seconds) - Padding around cuts to sound natural</label>
-            <input type="number" id="margin" value="0.1" step="0.05">
-        </div>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">✂️ Footage cut · silent portions</div>
+      <nav>
+        <a class="active" href="index.html">🏠 Home</a>
+        <a href="performance.html">⏱️ Performance</a>
+        <a href="rationale.html">🧠 Rationale</a>
+      </nav>
+    </header>
 
-        <button id="processBtn">Find & Process Last Video</button>
-        <div id="status"></div>
-    </div>
+    <section class="hero">
+      <h1>🎬 Drop a talking-head. 🤫 Cut the dead air. 📦 Keep the clips.</h1>
+      <p class="lead">Local FFmpeg pipeline: find silence, export speech clips into <code>output/</code>, stitch a tight master. Built to be run and watched by an AI agent — not a 4 GB NLE.</p>
+      <p>🌐 Live docs: <a href="https://rifaterdemsahin.github.io/footage-cut-silent-portions/">https://rifaterdemsahin.github.io/footage-cut-silent-portions/</a></p>
+    </section>
 
-    <script>
-        document.getElementById('processBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('processBtn');
-            const statusDiv = document.getElementById('status');
-            
-            const noiseTolerance = document.getElementById('noiseTolerance').value;
-            const duration = document.getElementById('duration').value;
-            const margin = document.getElementById('margin').value;
-            
-            btn.disabled = true;
-            btn.textContent = 'Processing... This may take a while';
-            statusDiv.style.display = 'block';
-            statusDiv.textContent = 'Starting processing...\n';
-            
-            try {
-                const response = await fetch('/api/process', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ noiseTolerance, duration, margin })
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    statusDiv.textContent += `\nSuccess!\nInput file: ${result.inputFile}\nOutput file: ${result.outputFile}\nMessage: ${result.message}`;
-                } else {
-                    statusDiv.textContent += `\nError: ${result.error}`;
-                }
-            } catch (err) {
-                statusDiv.textContent += `\nRequest failed: ${err.message}`;
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Find & Process Last Video';
-            }
+    <section class="grid">
+      <div class="stat"><b>3:54 → 1:08</b><span>🎞️ alpha.mp4 after auto-cut</span></div>
+      <div class="stat"><b>25 clips</b><span>📁 footage in output/alpha/clips/</span></div>
+      <div class="stat"><b>11.5 s</b><span>⚡ wall time on this Mac</span></div>
+      <div class="stat"><b>71%</b><span>🤫 silence removed</span></div>
+    </section>
+
+    <section class="card">
+      <h2>⚙️ Cut the last video in <code>movies/</code></h2>
+      <p>GitHub Pages is static — the button only works on the local server (<code>npm start</code> → <code>http://localhost:4000</code>).</p>
+      <label for="noiseTolerance">🔇 Silence threshold (dB) — use <code>auto</code> so quiet mics are not shredded</label>
+      <input type="text" id="noiseTolerance" value="auto">
+      <label for="duration">⏳ Minimum silence to cut (seconds)</label>
+      <input type="number" id="duration" value="0.5" step="0.1">
+      <label for="margin">🩹 Padding around each cut (seconds)</label>
+      <input type="number" id="margin" value="0.12" step="0.01">
+      <label for="file">🎯 Optional filename in movies/ (blank = newest)</label>
+      <input type="text" id="file" value="alpha.mp4" placeholder="alpha.mp4">
+      <button id="processBtn">🚀 Find &amp; process video</button>
+      <pre class="status" id="status" style="display:none; margin-top:1rem;"></pre>
+    </section>
+
+    <section class="card">
+      <h2>🆚 Why this instead of DaVinci Resolve?</h2>
+      <table class="compare">
+        <thead>
+          <tr><th></th><th>✂️ This tool</th><th>🎛️ DaVinci Resolve</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Job</strong></td>
+            <td class="ok">One job: delete dead air and dump usable clips.</td>
+            <td>Full NLE: color, Fairlight, Fusion, delivery, timeline taste.</td>
+          </tr>
+          <tr>
+            <td><strong>Time to first cut</strong></td>
+            <td class="ok">Drop file → one command → ~12 seconds for a 4‑minute 1080p clip.</td>
+            <td>Create project, import, inspect waveform, mark, ripple delete, export.</td>
+          </tr>
+          <tr>
+            <td><strong>Repeatability</strong></td>
+            <td class="ok">Same flags, same cuts, log + JSON report every run.</td>
+            <td>Human timeline. Hard to replay identically across 50 files.</td>
+          </tr>
+          <tr>
+            <td><strong>Agent / CI</strong></td>
+            <td class="ok">Headless. An agent can run, watch the log, fix FFmpeg, rerun.</td>
+            <td>GUI. No good “fix the timeline and push” loop for an agent.</td>
+          </tr>
+          <tr>
+            <td><strong>Cost / install</strong></td>
+            <td class="ok">Node + FFmpeg. No 4 GB app, no project database.</td>
+            <td>Studio features, GPU, project files, export queue.</td>
+          </tr>
+          <tr>
+            <td><strong>When Resolve wins</strong></td>
+            <td>Not for grade, titles, multicam, music edits, or picture lock.</td>
+            <td class="ok">Finish the film. This tool only feeds you clean speech clips.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Use Resolve when you are <em>editing a story</em>. Use this when you are <em>harvesting speech from a long take</em> so the NLE never sees the silence.</p>
+    </section>
+
+    <section class="card">
+      <h2>🤖 Prompt to give an AI agent (run · monitor · fix)</h2>
+      <p>Paste this into Grok / Claude / Codex in this repo. It is the whole operating loop.</p>
+      <textarea id="agentPrompt" readonly>You are in footage-cut-silent-portions. Goal: cut silent portions from a video, write clips + a nosilence master into output/, update performance numbers, then git commit and push. Do not stop on the first FFmpeg error.
+
+Setup
+- Source video goes in movies/. For this job the file is movies/alpha.mp4 (copied from Downloads/output alpha.mp4).
+- Need ffmpeg, ffprobe, Node 22+. npm install && npm start serves http://localhost:4000
+- GitHub Pages docs: https://rifaterdemsahin.github.io/footage-cut-silent-portions/ (static only — processing is local).
+
+Run
+1. node process-video.js movies/alpha.mp4 output auto 0.5 0.12
+2. Watch stdout for [progress] lines. Terminal success looks like { "ok": true, "clips": N, "outputDuration": "..." }.
+3. Confirm files exist:
+   - output/alpha/alpha_nosilence.mp4
+   - output/alpha/clips/clip_*.mp4
+   - output/last-run.json
+4. Sanity: output duration < source duration, clipCount > 0, concat file size > 0. Play or ffprobe if unsure.
+
+Monitor
+- If the process is still running, tail the log. Probe + silence-detect should be seconds; export-clips is the long step.
+- If it stalls > 2 minutes on a ~4 min 1080p file, kill it and inspect the last [progress] line.
+
+Fix
+- ffmpeg missing → brew install ffmpeg
+- Speech shredded / output far too short → threshold too hot. Re-run with a more negative dB (auto uses ~ meanVolume+8). Example: node process-video.js movies/alpha.mp4 output -45 0.5 0.12
+- Almost nothing cut → threshold too cold. Try -35.
+- concat fails → check output/alpha/concat.txt and that every clip encoded.
+- After a code fix, rerun the same command. Do not declare done until last-run.json is fresh.
+- Update public/performance.html from last-run.json timings. Keep movies/ and output/ gitignored (binaries stay local).
+- git add -A && git commit && git push origin main. If Pages should refresh, npm run deploy.
+
+Done when: clips are in output/, nosilence master exists, performance.html matches the run, and main is pushed.</textarea>
+      <button type="button" id="copyPrompt">📋 Copy agent prompt</button>
+    </section>
+
+    <section class="card">
+      <h2>💻 Local server</h2>
+      <pre class="note">npm install
+npm start
+# open http://localhost:4000 in Google Chrome
+
+# or cut from CLI (no browser)
+node process-video.js movies/alpha.mp4 output auto 0.5 0.12</pre>
+    </section>
+
+    <p class="footer">🧪 Last processed source: <code>alpha.mp4</code> · auto −40 dB · 25 speech clips · 12 Sep 2026</p>
+  </div>
+  <script>
+    document.getElementById('copyPrompt').addEventListener('click', async () => {
+      const text = document.getElementById('agentPrompt').value;
+      await navigator.clipboard.writeText(text);
+      document.getElementById('copyPrompt').textContent = '✅ Copied';
+      setTimeout(() => { document.getElementById('copyPrompt').textContent = '📋 Copy agent prompt'; }, 1500);
+    });
+
+    document.getElementById('processBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('processBtn');
+      const statusDiv = document.getElementById('status');
+      const noiseTolerance = document.getElementById('noiseTolerance').value;
+      const duration = document.getElementById('duration').value;
+      const margin = document.getElementById('margin').value;
+      const file = document.getElementById('file').value;
+      btn.disabled = true;
+      btn.textContent = '⏳ Processing… this can take a bit';
+      statusDiv.style.display = 'block';
+      statusDiv.textContent = '🚀 Starting…\n';
+      try {
+        const response = await fetch('/api/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ noiseTolerance, duration, margin, file })
         });
-    </script>
+        const result = await response.json();
+        if (response.ok) {
+          statusDiv.textContent += `\n✅ ${result.message}\n📥 ${result.inputFile}\n📤 ${result.outputFile}\n🧩 clips: ${result.clipCount}\n⏱️ ${result.timings && result.timings.totalLabel}\n🤫 removed: ${Number(result.removedPercent).toFixed(1)}%\n${result.sourceDuration} → ${result.outputDuration}`;
+        } else {
+          statusDiv.textContent += `\n❌ ${result.error}\n\nIf this is GitHub Pages, run npm start locally. Processing cannot run in the browser.`;
+        }
+      } catch (err) {
+        statusDiv.textContent += `\n❌ Request failed: ${err.message}\nThis page on GitHub Pages is docs-only. Run: npm start`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 Find & process video';
+      }
+    });
+  </script>
 </body>
 </html>
