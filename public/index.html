@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Cut Silence</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: 0 auto; }
+        .card { border: 1px solid #ccc; padding: 1.5rem; border-radius: 8px; box-shadow: 2px 2px 8px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        input[type="number"], input[type="text"] { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { padding: 0.75rem 1.5rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; width: 100%; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #a0c4ff; cursor: not-allowed; }
+        #status { margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; font-family: monospace; white-space: pre-wrap; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Auto-Cut Silence from Video</h2>
+        <p>This tool will automatically find the most recent video file in the <code>movies</code> folder, detect silent portions based on the configuration below, and create a new cut video in the <code>output</code> folder.</p>
+        
+        <div class="form-group">
+            <label for="noiseTolerance">Silence Threshold (dB) - The volume level considered as silence</label>
+            <input type="number" id="noiseTolerance" value="-30" step="1">
+        </div>
+        
+        <div class="form-group">
+            <label for="duration">Silence Duration (seconds) - Minimum duration of silence to be cut</label>
+            <input type="number" id="duration" value="0.5" step="0.1">
+        </div>
+        
+        <div class="form-group">
+            <label for="margin">Padding (seconds) - Padding around cuts to sound natural</label>
+            <input type="number" id="margin" value="0.1" step="0.05">
+        </div>
+
+        <button id="processBtn">Find & Process Last Video</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        document.getElementById('processBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('processBtn');
+            const statusDiv = document.getElementById('status');
+            
+            const noiseTolerance = document.getElementById('noiseTolerance').value;
+            const duration = document.getElementById('duration').value;
+            const margin = document.getElementById('margin').value;
+            
+            btn.disabled = true;
+            btn.textContent = 'Processing... This may take a while';
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = 'Starting processing...\n';
+            
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ noiseTolerance, duration, margin })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusDiv.textContent += `\nSuccess!\nInput file: ${result.inputFile}\nOutput file: ${result.outputFile}\nMessage: ${result.message}`;
+                } else {
+                    statusDiv.textContent += `\nError: ${result.error}`;
+                }
+            } catch (err) {
+                statusDiv.textContent += `\nRequest failed: ${err.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Find & Process Last Video';
+            }
+        });
+    </script>
+</body>
+</html>
