@@ -13,6 +13,12 @@ This project allows you to automatically cut silent portions from your video fil
    npm install
    ```
 
+## GitHub Pages Link
+The UI is available on GitHub Pages: [https://rifaterdemsahin.github.io/footage-cut-silent-portions/](https://rifaterdemsahin.github.io/footage-cut-silent-portions/)
+
+> [!WARNING] 
+> **Important Limitation:** GitHub Pages only hosts static files (HTML/CSS). This application requires a Node.js backend to run `ffmpeg` and process video files locally on your machine. Therefore, clicking the process button on the GitHub Pages site **will not work** because it cannot access your local file system or run FFmpeg. You must run the server locally to process videos!
+
 ## Usage
 1. Start the server by running:
    ```bash
