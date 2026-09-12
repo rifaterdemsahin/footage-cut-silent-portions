@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⏱️ Performance · silence cut</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">✂️ Footage cut · silent portions</div>
+      <nav>
+        <a href="index.html">🏠 Home</a>
+        <a class="active" href="performance.html">⏱️ Performance</a>
+        <a href="rationale.html">🧠 Rationale</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>⏱️ How long alpha.mp4 actually took</h1>
+      <p class="lead">Measured on this machine, 12 Sep 2026. Not a guess. Wall clock from <code>output/last-run.json</code>.</p>
+    </section>
+
+    <section class="grid">
+      <div class="stat"><b>11.527 s</b><span>🏁 total wall time</span></div>
+      <div class="stat"><b>20.3×</b><span>⚡ faster than realtime (3:54 source)</span></div>
+      <div class="stat"><b>10.677 s</b><span>🎞️ clip encode (the slow part)</span></div>
+      <div class="stat"><b>0.220 s</b><span>🤫 silence detect (audio-only)</span></div>
+    </section>
+
+    <section class="card">
+      <h2>📊 Stage breakdown</h2>
+      <table class="compare">
+        <thead>
+          <tr><th>Stage</th><th>Time</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>🔍 Probe + volume</td><td><strong>231 ms</strong></td><td>ffprobe + volumedetect. Mean −48.4 dB, peak −20.6 dB → auto threshold <strong>−40 dB</strong>.</td></tr>
+          <tr><td>🤫 Silence detect</td><td><strong>220 ms</strong></td><td>FFmpeg <code>silencedetect</code> on audio only. 27 silence regions.</td></tr>
+          <tr><td>✂️ Export 25 clips</td><td><strong>10.677 s</strong></td><td>libx264 veryfast CRF 20 + AAC 192k. This is ~93% of the run.</td></tr>
+          <tr><td>🧵 Concat</td><td><strong>348 ms</strong></td><td>concat demuxer, stream copy into <code>alpha_nosilence.mp4</code>.</td></tr>
+          <tr><td>🏁 Total</td><td><strong>11.527 s</strong></td><td>Started 09:47:36 UTC, finished 09:47:48 UTC.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>📦 Input vs output</h2>
+      <table class="compare">
+        <thead>
+          <tr><th></th><th>📥 Source</th><th>📤 Cut master</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>File</td><td><code>movies/alpha.mp4</code></td><td><code>output/alpha/alpha_nosilence.mp4</code></td></tr>
+          <tr><td>Duration</td><td>3:54.417</td><td class="ok">1:08.088</td></tr>
+          <tr><td>Size</td><td>68.0 MB</td><td class="ok">16.1 MB</td></tr>
+          <tr><td>Picture</td><td>1920×1080 · 30 fps · h264</td><td>same, re-encoded veryfast</td></tr>
+          <tr><td>Audio</td><td>AAC stereo 48 kHz</td><td>AAC 192k</td></tr>
+          <tr><td>Silence removed</td><td>—</td><td class="ok">167.1 s (71.3%)</td></tr>
+          <tr><td>Speech clips</td><td>—</td><td>25 files in <code>output/alpha/clips/</code></td></tr>
+        </tbody>
+      </table>
+      <p>A first pass at a fixed −30 dB kept only 28 s — the mic is quiet (mean −48 dB), so −30 treated speech as silence. Auto −40 dB is the number to trust on this file.</p>
+    </section>
+
+    <section class="card">
+      <h2>🧩 Clip list (footage on disk)</h2>
+      <table class="compare">
+        <thead>
+          <tr><th>#</th><th>Source window</th><th>Length</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>01</td><td>0.56s – 4.34s</td><td>3.78s</td></tr>
+          <tr><td>02</td><td>4.84s – 8.66s</td><td>3.82s</td></tr>
+          <tr><td>03</td><td>9.03s – 10.76s</td><td>1.73s</td></tr>
+          <tr><td>04</td><td>21.23s – 22.29s</td><td>1.06s</td></tr>
+          <tr><td>05</td><td>22.84s – 25.91s</td><td>3.07s</td></tr>
+          <tr><td>06</td><td>26.44s – 29.70s</td><td>3.26s</td></tr>
+          <tr><td>07</td><td>30.37s – 33.03s</td><td>2.66s</td></tr>
+          <tr><td>08</td><td>40.96s – 43.94s</td><td>2.98s</td></tr>
+          <tr><td>09</td><td>45.70s – 50.49s</td><td>4.79s</td></tr>
+          <tr><td>10</td><td>56.41s – 61.30s</td><td>4.88s</td></tr>
+          <tr><td>11</td><td>61.72s – 66.20s</td><td>4.48s</td></tr>
+          <tr><td>12</td><td>92.57s – 98.22s</td><td>5.65s</td></tr>
+          <tr><td>13</td><td>118.20s – 118.46s</td><td>0.27s</td></tr>
+          <tr><td>14</td><td>119.69s – 119.95s</td><td>0.27s</td></tr>
+          <tr><td>15</td><td>137.76s – 140.39s</td><td>2.63s</td></tr>
+          <tr><td>16</td><td>144.15s – 144.78s</td><td>0.63s</td></tr>
+          <tr><td>17</td><td>145.16s – 146.81s</td><td>1.65s</td></tr>
+          <tr><td>18</td><td>152.01s – 152.85s</td><td>0.84s</td></tr>
+          <tr><td>19</td><td>153.17s – 154.82s</td><td>1.65s</td></tr>
+          <tr><td>20</td><td>181.57s – 184.68s</td><td>3.11s</td></tr>
+          <tr><td>21</td><td>185.10s – 186.33s</td><td>1.23s</td></tr>
+          <tr><td>22</td><td>209.35s – 213.19s</td><td>3.84s</td></tr>
+          <tr><td>23</td><td>213.62s – 217.98s</td><td>4.36s</td></tr>
+          <tr><td>24</td><td>218.54s – 221.88s</td><td>3.34s</td></tr>
+          <tr><td>25</td><td>226.42s – 227.82s</td><td>1.39s</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>🖥️ What to expect on other machines</h2>
+      <ul class="emoji">
+        <li>🤫 <strong>Detect</strong> scales with audio length, not resolution. A 20‑minute file is still usually under a few seconds.</li>
+        <li>🎞️ <strong>Encode</strong> scales with kept video, not source length. More speech → longer export. 1080p veryfast is roughly 0.15–0.2 s per kept second here.</li>
+        <li>🧠 <strong>Do not use a fixed −30 dB</strong> on quiet lavs. Auto saved this run from a 28 s false cut.</li>
+      </ul>
+    </section>
+
+    <p class="footer">🌐 <a href="https://rifaterdemsahin.github.io/footage-cut-silent-portions/performance.html">GitHub Pages copy of this page</a></p>
+  </div>
+</body>
+</html>

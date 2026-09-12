@@ -1,0 +1,460 @@
+{
+  "startedAt": "2026-09-12T09:47:36.532Z",
+  "finishedAt": "2026-09-12T09:47:48.060Z",
+  "inputFile": "alpha.mp4",
+  "inputPath": "/Users/rifaterdemsahin/projects/footage-cut-silent-portions/movies/alpha.mp4",
+  "outputFile": "alpha/alpha_nosilence.mp4",
+  "settings": {
+    "noiseTolerance": -40,
+    "noiseMode": "auto",
+    "duration": 0.5,
+    "margin": 0.12,
+    "minClip": 0.25,
+    "mergeGap": 0.25
+  },
+  "source": {
+    "durationSeconds": 234.417,
+    "durationLabel": "3:54.417",
+    "bytes": 71216393,
+    "width": 1920,
+    "height": 1080,
+    "fps": "30/1",
+    "videoCodec": "h264",
+    "audioCodec": "aac",
+    "meanVolume": -48.4,
+    "maxVolume": -20.6
+  },
+  "result": {
+    "durationSeconds": 68.088021,
+    "durationLabel": "1:08.088",
+    "bytes": 16836936,
+    "clipCount": 25,
+    "silenceCount": 27,
+    "keptSeconds": 67.36364700000021,
+    "removedSeconds": 167.0533529999998,
+    "removedPercent": 71.2633268918209,
+    "realtimeFactor": 20.33634076516006
+  },
+  "timings": {
+    "probeMs": 231,
+    "detectSilenceMs": 220,
+    "exportClipsMs": 10677,
+    "concatMs": 348,
+    "totalMs": 11527,
+    "totalLabel": "0:11.527"
+  },
+  "silences": [
+    {
+      "start": 0,
+      "end": 0.679688
+    },
+    {
+      "start": 4.215354,
+      "end": 4.957687
+    },
+    {
+      "start": 8.540188,
+      "end": 9.152125
+    },
+    {
+      "start": 10.638021,
+      "end": 16.80825
+    },
+    {
+      "start": 16.808521,
+      "end": 21.352146
+    },
+    {
+      "start": 22.172875,
+      "end": 22.96175
+    },
+    {
+      "start": 25.786854,
+      "end": 26.563146
+    },
+    {
+      "start": 29.58425,
+      "end": 30.485125
+    },
+    {
+      "start": 32.909667,
+      "end": 41.083729
+    },
+    {
+      "start": 43.821125,
+      "end": 45.817375
+    },
+    {
+      "start": 50.368625,
+      "end": 56.533958
+    },
+    {
+      "start": 61.176042,
+      "end": 61.840521
+    },
+    {
+      "start": 66.084063,
+      "end": 92.692646
+    },
+    {
+      "start": 98.101583,
+      "end": 118.316125
+    },
+    {
+      "start": 118.344521,
+      "end": 119.806375
+    },
+    {
+      "start": 119.834458,
+      "end": 137.877167
+    },
+    {
+      "start": 140.271375,
+      "end": 144.273542
+    },
+    {
+      "start": 144.664333,
+      "end": 145.280208
+    },
+    {
+      "start": 146.690292,
+      "end": 152.129167
+    },
+    {
+      "start": 152.726542,
+      "end": 153.294167
+    },
+    {
+      "start": 154.699333,
+      "end": 181.687146
+    },
+    {
+      "start": 184.559667,
+      "end": 185.219104
+    },
+    {
+      "start": 186.209,
+      "end": 209.474604
+    },
+    {
+      "start": 213.072312,
+      "end": 213.742833
+    },
+    {
+      "start": 217.858646,
+      "end": 218.658333
+    },
+    {
+      "start": 221.761292,
+      "end": 226.544458
+    },
+    {
+      "start": 227.696354,
+      "end": 234.417
+    }
+  ],
+  "keepPeriods": [
+    {
+      "start": 0.559688,
+      "end": 4.335354
+    },
+    {
+      "start": 4.837687,
+      "end": 8.660188
+    },
+    {
+      "start": 9.032125,
+      "end": 10.758021
+    },
+    {
+      "start": 21.232146,
+      "end": 22.292875000000002
+    },
+    {
+      "start": 22.841749999999998,
+      "end": 25.906854000000003
+    },
+    {
+      "start": 26.443146,
+      "end": 29.704250000000002
+    },
+    {
+      "start": 30.365125,
+      "end": 33.029666999999996
+    },
+    {
+      "start": 40.963729,
+      "end": 43.941125
+    },
+    {
+      "start": 45.697375,
+      "end": 50.488625
+    },
+    {
+      "start": 56.413958,
+      "end": 61.296042
+    },
+    {
+      "start": 61.720521000000005,
+      "end": 66.204063
+    },
+    {
+      "start": 92.57264599999999,
+      "end": 98.22158300000001
+    },
+    {
+      "start": 118.196125,
+      "end": 118.464521
+    },
+    {
+      "start": 119.686375,
+      "end": 119.954458
+    },
+    {
+      "start": 137.75716699999998,
+      "end": 140.391375
+    },
+    {
+      "start": 144.153542,
+      "end": 144.784333
+    },
+    {
+      "start": 145.16020799999998,
+      "end": 146.810292
+    },
+    {
+      "start": 152.009167,
+      "end": 152.846542
+    },
+    {
+      "start": 153.17416699999998,
+      "end": 154.819333
+    },
+    {
+      "start": 181.567146,
+      "end": 184.679667
+    },
+    {
+      "start": 185.09910399999998,
+      "end": 186.329
+    },
+    {
+      "start": 209.354604,
+      "end": 213.19231200000002
+    },
+    {
+      "start": 213.62283299999999,
+      "end": 217.978646
+    },
+    {
+      "start": 218.538333,
+      "end": 221.881292
+    },
+    {
+      "start": 226.424458,
+      "end": 227.81635400000002
+    }
+  ],
+  "clips": [
+    {
+      "file": "alpha/clips/clip_01_0.56s-4.34s.mp4",
+      "index": 1,
+      "start": 0.559688,
+      "end": 4.335354,
+      "duration": 3.7756659999999997,
+      "bytes": 952021
+    },
+    {
+      "file": "alpha/clips/clip_02_4.84s-8.66s.mp4",
+      "index": 2,
+      "start": 4.837687,
+      "end": 8.660188,
+      "duration": 3.822501,
+      "bytes": 878575
+    },
+    {
+      "file": "alpha/clips/clip_03_9.03s-10.76s.mp4",
+      "index": 3,
+      "start": 9.032125,
+      "end": 10.758021,
+      "duration": 1.7258959999999988,
+      "bytes": 401600
+    },
+    {
+      "file": "alpha/clips/clip_04_21.23s-22.29s.mp4",
+      "index": 4,
+      "start": 21.232146,
+      "end": 22.292875000000002,
+      "duration": 1.060729000000002,
+      "bytes": 338047
+    },
+    {
+      "file": "alpha/clips/clip_05_22.84s-25.91s.mp4",
+      "index": 5,
+      "start": 22.841749999999998,
+      "end": 25.906854000000003,
+      "duration": 3.065104000000005,
+      "bytes": 671408
+    },
+    {
+      "file": "alpha/clips/clip_06_26.44s-29.70s.mp4",
+      "index": 6,
+      "start": 26.443146,
+      "end": 29.704250000000002,
+      "duration": 3.261104000000003,
+      "bytes": 734893
+    },
+    {
+      "file": "alpha/clips/clip_07_30.37s-33.03s.mp4",
+      "index": 7,
+      "start": 30.365125,
+      "end": 33.029666999999996,
+      "duration": 2.6645419999999973,
+      "bytes": 605775
+    },
+    {
+      "file": "alpha/clips/clip_08_40.96s-43.94s.mp4",
+      "index": 8,
+      "start": 40.963729,
+      "end": 43.941125,
+      "duration": 2.977395999999999,
+      "bytes": 773690
+    },
+    {
+      "file": "alpha/clips/clip_09_45.70s-50.49s.mp4",
+      "index": 9,
+      "start": 45.697375,
+      "end": 50.488625,
+      "duration": 4.791249999999998,
+      "bytes": 1100835
+    },
+    {
+      "file": "alpha/clips/clip_10_56.41s-61.30s.mp4",
+      "index": 10,
+      "start": 56.413958,
+      "end": 61.296042,
+      "duration": 4.882083999999999,
+      "bytes": 1114423
+    },
+    {
+      "file": "alpha/clips/clip_11_61.72s-66.20s.mp4",
+      "index": 11,
+      "start": 61.720521000000005,
+      "end": 66.204063,
+      "duration": 4.483542,
+      "bytes": 1047488
+    },
+    {
+      "file": "alpha/clips/clip_12_92.57s-98.22s.mp4",
+      "index": 12,
+      "start": 92.57264599999999,
+      "end": 98.22158300000001,
+      "duration": 5.648937000000018,
+      "bytes": 1294379
+    },
+    {
+      "file": "alpha/clips/clip_13_118.20s-118.46s.mp4",
+      "index": 13,
+      "start": 118.196125,
+      "end": 118.464521,
+      "duration": 0.26839600000000985,
+      "bytes": 131881
+    },
+    {
+      "file": "alpha/clips/clip_14_119.69s-119.95s.mp4",
+      "index": 14,
+      "start": 119.686375,
+      "end": 119.954458,
+      "duration": 0.2680830000000043,
+      "bytes": 120438
+    },
+    {
+      "file": "alpha/clips/clip_15_137.76s-140.39s.mp4",
+      "index": 15,
+      "start": 137.75716699999998,
+      "end": 140.391375,
+      "duration": 2.6342080000000294,
+      "bytes": 764170
+    },
+    {
+      "file": "alpha/clips/clip_16_144.15s-144.78s.mp4",
+      "index": 16,
+      "start": 144.153542,
+      "end": 144.784333,
+      "duration": 0.6307910000000163,
+      "bytes": 243736
+    },
+    {
+      "file": "alpha/clips/clip_17_145.16s-146.81s.mp4",
+      "index": 17,
+      "start": 145.16020799999998,
+      "end": 146.810292,
+      "duration": 1.650084000000021,
+      "bytes": 438768
+    },
+    {
+      "file": "alpha/clips/clip_18_152.01s-152.85s.mp4",
+      "index": 18,
+      "start": 152.009167,
+      "end": 152.846542,
+      "duration": 0.8373750000000086,
+      "bytes": 289024
+    },
+    {
+      "file": "alpha/clips/clip_19_153.17s-154.82s.mp4",
+      "index": 19,
+      "start": 153.17416699999998,
+      "end": 154.819333,
+      "duration": 1.6451660000000174,
+      "bytes": 461596
+    },
+    {
+      "file": "alpha/clips/clip_20_181.57s-184.68s.mp4",
+      "index": 20,
+      "start": 181.567146,
+      "end": 184.679667,
+      "duration": 3.1125209999999868,
+      "bytes": 824695
+    },
+    {
+      "file": "alpha/clips/clip_21_185.10s-186.33s.mp4",
+      "index": 21,
+      "start": 185.09910399999998,
+      "end": 186.329,
+      "duration": 1.229896000000025,
+      "bytes": 404412
+    },
+    {
+      "file": "alpha/clips/clip_22_209.35s-213.19s.mp4",
+      "index": 22,
+      "start": 209.354604,
+      "end": 213.19231200000002,
+      "duration": 3.8377080000000205,
+      "bytes": 950847
+    },
+    {
+      "file": "alpha/clips/clip_23_213.62s-217.98s.mp4",
+      "index": 23,
+      "start": 213.62283299999999,
+      "end": 217.978646,
+      "duration": 4.355813000000012,
+      "bytes": 1050419
+    },
+    {
+      "file": "alpha/clips/clip_24_218.54s-221.88s.mp4",
+      "index": 24,
+      "start": 218.538333,
+      "end": 221.881292,
+      "duration": 3.3429590000000076,
+      "bytes": 855867
+    },
+    {
+      "file": "alpha/clips/clip_25_226.42s-227.82s.mp4",
+      "index": 25,
+      "start": 226.424458,
+      "end": 227.81635400000002,
+      "duration": 1.391896000000031,
+      "bytes": 420555
+    }
+  ]
+}
