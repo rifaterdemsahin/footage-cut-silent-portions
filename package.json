@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "deploy": "gh-pages -d public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +24,8 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "multer": "^2.3.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
